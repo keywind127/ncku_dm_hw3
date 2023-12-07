@@ -22,28 +22,28 @@ epsilon        = 1e-8
 
 if (__name__ == "__main__"):
 
-    edges = load_edges("./data/graph_3.txt")
+    edges = load_edges("./data/graph_5.txt")
 
     (adjacency_matrix, mapping) = edges_to_adjacency_matrix(edges)
 
-    pagerank = pagerank_algorithm(
-        adjacency_matrix, 
-        damping_factor = damping_factor, 
-        max_iterations = max_iterations,
-        epsilon        = epsilon
-    )
+    # pagerank = pagerank_algorithm(
+    #     adjacency_matrix, 
+    #     damping_factor = damping_factor, 
+    #     max_iterations = max_iterations,
+    #     epsilon        = epsilon
+    # )
 
-    print("PGR:", pagerank)
+    # print("PGR:",  __import__("numpy").round(pagerank, 3))
 
-    (authority, hubness) = hits_algorithm(
-        adjacency_matrix, 
-        max_iterations = max_iterations,
-        epsilon        = epsilon
-    )
+    # (authority, hubness) = hits_algorithm(
+    #     adjacency_matrix, 
+    #     max_iterations = max_iterations,
+    #     epsilon        = epsilon
+    # )
 
-    print("ATH:", authority)
+    # print("ATH:", __import__("numpy").round(authority, 3))
 
-    print("HUB:", hubness)
+    # print("HUB:", __import__("numpy").round(hubness, 3))
 
     simrank = simrank_algorithm(
         adjacency_matrix, 

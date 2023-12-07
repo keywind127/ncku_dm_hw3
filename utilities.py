@@ -2,6 +2,8 @@ import numpy as np
 
 from typing import *
 
+import re 
+
 def edges_to_adjacency_matrix(edges : List[ List[ int ] ]) -> Tuple[ np.ndarray, Dict[ int, int ] ]:
 
     assert isinstance(edges, list)
@@ -19,12 +21,19 @@ def edges_to_adjacency_matrix(edges : List[ List[ int ] ]) -> Tuple[ np.ndarray,
 
     return (adjacency_matrix, mapping)
 
-def load_edges(filename : str) -> List[ List[ int ] ]:
+def load_edges(filename : str, csv_format : Optional[ bool ] = True) -> List[ List[ int ] ]:
 
     assert isinstance(filename, str)
 
+    if (csv_format):
+
+        return [
+            list(map(int, edge_str.replace(" ", "").split(","))) for edge_str in 
+                filter("".__ne__, open(filename, mode = "r", encoding = "utf-8").readlines())
+        ]
+    
     return [
-        list(map(int, edge_str.replace(" ", "").split(","))) for edge_str in 
+        list(map(int, filter("".__ne__, re.split("[ \t]+", edge_str))))[1:] for edge_str in 
             filter("".__ne__, open(filename, mode = "r", encoding = "utf-8").readlines())
     ]
 
@@ -45,3 +54,7 @@ if (__name__ == "__main__"):
     bid_adj_mat = bidirectional_adjacency_matrix(adj_mat)
 
     print(bid_adj_mat)
+
+    edges = load_edges("./data/ibm-5000.txt", csv_format = False)
+
+    print(edges)
