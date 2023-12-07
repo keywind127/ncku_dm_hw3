@@ -2,13 +2,18 @@ from utilities import edges_to_adjacency_matrix, load_edges
 
 from pagerank_algo import pagerank_algorithm
 
+from simrank_algo import simrank_algorithm
+
 from hits_algo import hits_algorithm
+
 
 # >> CONSTANTS 
 
 max_iterations = 30
 
-damping_factor = 0.15
+damping_factor = 0.10
+
+decay_factor   = 0.90
 
 epsilon        = 1e-8
 
@@ -39,3 +44,11 @@ if (__name__ == "__main__"):
     print("ATH:", authority)
 
     print("HUB:", hubness)
+
+    simrank = simrank_algorithm(
+        adjacency_matrix, 
+        decay_factor   = 0.60, 
+        max_iterations = max_iterations
+    )
+
+    print("SIM:", simrank)

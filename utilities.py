@@ -28,8 +28,20 @@ def load_edges(filename : str) -> List[ List[ int ] ]:
             filter("".__ne__, open(filename, mode = "r", encoding = "utf-8").readlines())
     ]
 
+def bidirectional_adjacency_matrix(adjacency_matrix : np.ndarray) -> np.ndarray:
+
+    return adjacency_matrix | adjacency_matrix.T
+
 if (__name__ == "__main__"):
 
     edges = load_edges("./test_data/graph1.txt")
 
     print(edges)
+
+    adj_mat, mapping = edges_to_adjacency_matrix(edges)
+
+    print(adj_mat)
+
+    bid_adj_mat = bidirectional_adjacency_matrix(adj_mat)
+
+    print(bid_adj_mat)
