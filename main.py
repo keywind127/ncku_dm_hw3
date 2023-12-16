@@ -6,6 +6,8 @@ from simrank_algo import simrank_algorithm
 
 from hits_algo import hits_algorithm
 
+from utils import StopWatch
+
 import numpy as np
 
 import os
@@ -55,6 +57,8 @@ if (__name__ == "__main__"):
 
         filename = graph_names[idx]
 
+        print(filename)
+
         basename = os.path.basename(os.path.splitext(filename)[0])
 
         current_folder = os.path.join(output_folder, basename)
@@ -63,50 +67,53 @@ if (__name__ == "__main__"):
 
         (adjacency_matrix, mapping) = edges_to_adjacency_matrix(edges)
 
-        pagerank = pagerank_algorithm(
-            adjacency_matrix, 
-            damping_factor = damping_factor, 
-            max_iterations = max_iterations,
-            epsilon        = epsilon
-        )
+        with StopWatch("PageRank: {} Seconds"):
+            pagerank = pagerank_algorithm(
+                adjacency_matrix, 
+                damping_factor = damping_factor, 
+                max_iterations = max_iterations,
+                epsilon        = epsilon
+            )
 
-        print("PGR:",  __import__("numpy").round(pagerank, 3))
+        # print("PGR:",  __import__("numpy").round(pagerank, 3))
 
-        print("Num Nodes:", pagerank.__len__())
+        # print("Num Nodes:", pagerank.__len__())
 
         np.savetxt(f"{current_folder}/{basename}_PageRank.txt", pagerank, fmt = "%1.3f")
 
-        (authority, hubness) = hits_algorithm(
-            adjacency_matrix, 
-            max_iterations = max_iterations,
-            epsilon        = epsilon
-        )
+        with StopWatch("HITS: {} Seconds"):
+            (authority, hubness) = hits_algorithm(
+                adjacency_matrix, 
+                max_iterations = max_iterations,
+                epsilon        = epsilon
+            )
 
         np.savetxt(f"{current_folder}/{basename}_HITS_authority.txt", authority, fmt = "%1.3f")
 
         np.savetxt(f"{current_folder}/{basename}_HITS_hub.txt", hubness, fmt = "%1.3f")
 
-        print("ATH:", __import__("numpy").round(authority, 3))
+        # print("ATH:", __import__("numpy").round(authority, 3))
 
-        print("HUB:", __import__("numpy").round(hubness, 3))
+        # print("HUB:", __import__("numpy").round(hubness, 3))
 
-        print("Num Nodes:", authority.__len__(), hubness.__len__())
+        # print("Num Nodes:", authority.__len__(), hubness.__len__())
 
         if (basename in simrank_exception):
             continue
 
-        simrank = simrank_algorithm(
-            adjacency_matrix, 
-            decay_factor   = decay_factor, 
-            max_iterations = max_iterations
-        )
+        with StopWatch("SimRank: {} Seconds"):
+            simrank = simrank_algorithm(
+                adjacency_matrix, 
+                decay_factor   = decay_factor, 
+                max_iterations = max_iterations
+            )
 
         np.savetxt(f"{current_folder}/{basename}_SimRank.txt", simrank, fmt = "%1.3f")
 
-        print("SIM:", simrank)
+        # print("SIM:", simrank)
 
         simrank = np.round(simrank, 3)
 
-        print(np.sum(simrank == 0.021))
+        # print(np.sum(simrank == 0.021))
 
-        print(adjacency_matrix.__len__())
+        # print(adjacency_matrix.__len__())
